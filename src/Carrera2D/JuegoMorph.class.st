@@ -39,10 +39,12 @@ JuegoMorph >> extent: unPunto [
     altoImagen := self height.
     imagenRuta := imagenRuta scaledToSize: anchoImagen @ altoImagen.
     
-"Avisamos al auto de los cambios "
-    
-    " Posicionamos el auto abajo (dinámico según su nuevo tamaño)"
-    autoMorph position: autoMorph position x @ (self position y + self height - autoMorph height - 180).
+	"obligamos al auto a escalarse a la nueva proporcion"
+	autoMorph escalarEn: anchoImagen.
+	
+
+	" Posicionamos el auto abajo (dinámico según su nuevo tamaño)"
+    autoMorph position: autoMorph position x @ (self position y + self height - autoMorph height - 7).
 ]
 
 { #category : 'event handling' }
