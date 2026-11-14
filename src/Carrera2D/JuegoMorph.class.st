@@ -19,10 +19,30 @@ JuegoMorph >> drawOn: unCanvas [
 
     posicionX := (self width - imagenRuta width) / 2.
 
-    unCanvas drawImage: imagenRuta at: posicionX@desplazamiento.
+    unCanvas drawImage: imagenRuta at: self position + (posicionX@desplazamiento).
 
-    unCanvas drawImage: imagenRuta
-        at: posicionX@(desplazamiento - imagenRuta height).
+    unCanvas drawImage: imagenRuta at: self position + (posicionX@(desplazamiento - imagenRuta height)).
+]
+
+{ #category : 'geometry' }
+JuegoMorph >> extent: unPunto [
+    | anchoImagen altoImagen |
+    
+    " Actualizamos el tamaño físico de la ventana"
+    super extent: unPunto.
+    
+    " Seguro por si Pharo llama a esto antes de que termine el initialize"
+    (imagenRuta isNil or: [ autoMorph isNil ]) ifTrue: [ ^ self ].
+    
+    " Recalculamos la textura al tamaño actual"
+    anchoImagen := self width. 
+    altoImagen := self height.
+    imagenRuta := imagenRuta scaledToSize: anchoImagen @ altoImagen.
+    
+"Avisamos al auto de los cambios "
+    
+    " Posicionamos el auto abajo (dinámico según su nuevo tamaño)"
+    autoMorph position: autoMorph position x @ (self position y + self height - autoMorph height - 180).
 ]
 
 { #category : 'event handling' }
@@ -41,23 +61,16 @@ JuegoMorph >> handlesMouseOver: evento [
 
 { #category : 'initialization' }
 JuegoMorph >> initialize [ 
-
-| factor imagenOriginal  anchoImagen altoImagen|
+	
 	super initialize.
-	self extent: 1200@800.
-	imagenOriginal := (Form fromFileNamed: 'C:\Carrera2D\ruta1.png').
-	
-	
-	factor := self height / imagenOriginal height.
-   anchoImagen := (imagenOriginal width * factor) rounded.
-   altoImagen := self height.
 
-   imagenRuta := imagenOriginal scaledToSize: anchoImagen@altoImagen.
-
+	"1. Cargamos las cosas a la memoria UNA sola vez"
+	imagenRuta:= Form fromFileNamed: 'C:\Carrera2D\ruta2.png'.
 	autoMorph:= AutoMorph new.
 	self addMorph: autoMorph.
-	autoMorph position:
-    ((self width - autoMorph width) / 2) @ (self height - 160).
+	
+"2. Al definir el tamaño inicial, Pharo llamará automáticamente al método extent: que crearemos abajo"
+	self extent: 1280@720.
 ]
 
 { #category : 'event handling' }

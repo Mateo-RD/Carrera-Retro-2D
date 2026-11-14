@@ -11,10 +11,12 @@ Class {
 
 { #category : 'as yet unclassified' }
 AutoMorph >> actualizarPosicion [
-    self position:
-        (((self owner width - self width) / 2
-        + vehiculo posicionX) rounded)
-        @ (self owner height - self height - 20).
+
+	| centroVisualX |
+	
+	
+	centroVisualX := (self owner width / 2) - (self width / 2).
+    self position: (vehiculo posicionX + centroVisualX + self owner position x) @self  position y.
 ]
 
 { #category : 'drawing' }
@@ -28,10 +30,13 @@ AutoMorph >> drawOn: carro [
 AutoMorph >> initialize [
 
 	super initialize.
+	
+	vehiculo := Vehiculo new.
 	self color: Color transparent.
-	auto:= (Form fromFileNamed: 'C:\Carrera2D\auto.png') scaledToSize: 200@250.
-	self extent: 200@250.
+	auto = (Form fromFileNamed: 'C:\Carrera2D\auto.png') scaledToSize: 150@200.
 
+
+"La variable 'auto' es la que usa el método drawOn: para estampar"
 ]
 
 { #category : 'accessing' }

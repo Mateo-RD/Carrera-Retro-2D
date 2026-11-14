@@ -72,6 +72,12 @@ Vehiculo >> posicionX [
 ]
 
 { #category : 'accessing' }
+Vehiculo >> posicionX: ejeX [
+
+	posicionX:= ejeX 
+]
+
+{ #category : 'accessing' }
 Vehiculo >> ruta: unaRuta [
 
 ruta:= unaRuta. 
