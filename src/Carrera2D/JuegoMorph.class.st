@@ -31,8 +31,7 @@ JuegoMorph >> extent: unPunto [
     " Actualizamos el tamaño físico de la ventana"
     super extent: unPunto.
     
-    " Seguro por si Pharo llama a esto antes de que termine el initialize"
-    (imagenRuta isNil or: [ autoMorph isNil ]) ifTrue: [ ^ self ].
+
     
     " Recalculamos la textura al tamaño actual"
     anchoImagen := self width. 

@@ -27,8 +27,8 @@ Ruta >> desplazamientoLineas [
 { #category : 'initialization' }
 Ruta >> initialize [ 
 
-limiteIzquierdo:= -400.
-limiteDerecho:= 400.	
+limiteIzquierdo:= -60.
+limiteDerecho:= 60.	
 desplazamientoLineas:= 0.
 
 ]
