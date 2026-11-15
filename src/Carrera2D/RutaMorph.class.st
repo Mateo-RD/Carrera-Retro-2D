@@ -4,49 +4,52 @@ Class {
 	#instVars : [
 		'ruta',
 		'imagenOriginal',
-		'imagenRuta'
+		'imagenRuta',
+		'alturaEscalada'
 	],
 	#category : 'Carrera2D',
 	#package : 'Carrera2D'
 }
 
-{ #category : 'geometry' }
-RutaMorph >> bounds: unRectangulo [
-    super bounds: unRectangulo.
-
-    imagenOriginal ifNotNil: [
-        imagenRuta := imagenOriginal scaledToSize: self extent.
-        self changed.
-    ].
-]
-
 { #category : 'drawing' }
 RutaMorph >> drawOn: dibujo [
-    | desplazamiento |
+    | desplazamiento posicionX |
 
-   super drawOn: dibujo.
+    super drawOn: dibujo.
 
-   ruta ifNil: [ ^self ].
+    ruta ifNil: [ ^self ].
 
-   desplazamiento := ruta desplazamientoLineas \\ imagenRuta height.
+    "Escalar solamente cuando cambia la altura"
+    alturaEscalada ~= self height ifTrue: [
+        imagenRuta := imagenOriginal
+            scaledToSize: (self width @ self height).
 
+        "Garantizar que la escala se base en la altura"
+        imagenRuta := imagenOriginal
+            scaledToSize:
+                ((imagenOriginal width * self height /
+                    imagenOriginal height) rounded @ self height).
 
-   dibujo drawImage: imagenRuta
-       at: self bounds origin + (0 @ desplazamiento).
+        alturaEscalada := self height.
+    ].
 
-   dibujo drawImage: imagenRuta
-       at: self bounds origin +
-           (0 @ (desplazamiento - imagenRuta height)).
+    "Centrar la imagen horizontalmente"
+    posicionX := (self width - imagenRuta width) / 2.
+
+    "Desplazamiento de la pista"
+    desplazamiento := ruta desplazamientoLineas \\ imagenRuta height.
+
+    dibujo drawImage: imagenRuta
+        at: self bounds origin + (posicionX @ desplazamiento).
+
+    dibujo drawImage: imagenRuta
+        at: self bounds origin +
+            (posicionX @ (desplazamiento - imagenRuta height)).
 ]
 
 { #category : 'geometry' }
 RutaMorph >> extent: unPunto [
     super extent: unPunto.
-
-    imagenOriginal ifNotNil: [
-        imagenRuta := imagenOriginal scaledToSize: unPunto.
-    ].
-
     self changed.
 ]
 
@@ -54,11 +57,13 @@ RutaMorph >> extent: unPunto [
 RutaMorph >> initialize [
    super initialize.
 
-   self color: Color transparent.
+
 
    imagenOriginal := Form fromFileNamed: 'C:\Carrera2D\ruta2.png'.
 
    imagenRuta := imagenOriginal.
+
+	alturaEscalada := 0.
 ]
 
 { #category : 'accessing' }
