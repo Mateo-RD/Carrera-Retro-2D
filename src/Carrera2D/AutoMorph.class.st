@@ -28,7 +28,7 @@ AutoMorph >> actualizarPosicion [
 AutoMorph >> drawOn: carro [
 
 	super drawOn: carro.
-	carro drawImage: auto at: self position.
+	carro translucentImage: auto at: self position.
 ]
 
 { #category : 'as yet unclassified' }

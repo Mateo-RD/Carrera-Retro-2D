@@ -51,6 +51,11 @@ Obstaculo >> ancho: unAncho [
     ancho := unAncho.
 ]
 
+{ #category : 'as yet unclassified' }
+Obstaculo >> avanzar: unaDistancia [
+    posicionY := posicionY + unaDistancia.
+]
+
 { #category : 'accessing' }
 Obstaculo >> carril [
 
@@ -61,6 +66,11 @@ Obstaculo >> carril [
 Obstaculo >> carril: unCarril [
 
 	carril:= unCarril.
+]
+
+{ #category : 'as yet unclassified' }
+Obstaculo >> desactivar [
+    activo := false.
 ]
 
 { #category : 'initialization' }

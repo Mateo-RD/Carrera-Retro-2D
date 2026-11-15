@@ -5,45 +5,32 @@ Class {
 		'ruta',
 		'vehiculo',
 		'autoMorph',
-		'imagenRuta'
+		'rutaMorph',
+		'obstaculos'
 	],
 	#category : 'Carrera2D',
 	#package : 'Carrera2D'
 }
 
-{ #category : 'drawing' }
-JuegoMorph >> drawOn: unCanvas [
-    | desplazamiento posicionX |
-
-    desplazamiento := ruta desplazamientoLineas \\ imagenRuta height.
-
-    posicionX := (self width - imagenRuta width) / 2.
-
-    unCanvas drawImage: imagenRuta at: self position + (posicionX@desplazamiento).
-
-    unCanvas drawImage: imagenRuta at: self position + (posicionX@(desplazamiento - imagenRuta height)).
-]
-
 { #category : 'geometry' }
 JuegoMorph >> extent: unPunto [
-    | anchoImagen altoImagen |
-    
+
     " Actualizamos el tamaño físico de la ventana"
     super extent: unPunto.
     
 
+   rutaMorph ifNotNil: [
+       rutaMorph bounds: self bounds.
+    ].
     
-    " Recalculamos la textura al tamaño actual"
-    anchoImagen := self width. 
-    altoImagen := self height.
-    imagenRuta := imagenRuta scaledToSize: anchoImagen @ altoImagen.
-    
-	"obligamos al auto a escalarse a la nueva proporcion"
-	autoMorph escalarEn: anchoImagen.
-	
 
-	" Posicionamos el auto abajo (dinámico según su nuevo tamaño)"
-    autoMorph position: autoMorph position x @ (self position y + self height - autoMorph height - 7).
+    autoMorph ifNotNil: [
+       autoMorph escalarEn: self width.
+
+       autoMorph position:
+           autoMorph position x @
+           (self position y + self height - autoMorph height - 7).
+    ].
 ]
 
 { #category : 'event handling' }
@@ -64,14 +51,19 @@ JuegoMorph >> handlesMouseOver: evento [
 JuegoMorph >> initialize [ 
 	
 	super initialize.
-
-	"1. Cargamos las cosas a la memoria UNA sola vez"
-	imagenRuta:= Form fromFileNamed: 'C:\Carrera2D\ruta2.png'.
-	autoMorph:= AutoMorph new.
-	self addMorph: autoMorph.
 	
-"2. Al definir el tamaño inicial, Pharo llamará automáticamente al método extent: que crearemos abajo"
+	rutaMorph := RutaMorph new.
+   self addMorphBack: rutaMorph.
+
+	autoMorph := AutoMorph new.
+   self addMorphFront: autoMorph.
+
+	obstaculos := OrderedCollection new.
+
+"2. Al definir el tamaño inicial"
 	self extent: 1280@720.
+	
+	rutaMorph extent: self extent.
 ]
 
 { #category : 'event handling' }
@@ -111,9 +103,9 @@ JuegoMorph >> mouseEnter: evento [
 ]
 
 { #category : 'accessing' }
-JuegoMorph >> ruta: rut [ 
-
-	ruta:= rut.
+JuegoMorph >> ruta: unaRuta [
+   ruta := unaRuta.
+   rutaMorph ruta: unaRuta.
 
 ]
 
