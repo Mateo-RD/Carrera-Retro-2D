@@ -6,11 +6,43 @@ Class {
 		'vehiculo',
 		'autoMorph',
 		'rutaMorph',
-		'obstaculos'
+		'obstaculos',
+		'contadorObstaculos'
 	],
 	#category : 'Carrera2D',
 	#package : 'Carrera2D'
 }
+
+{ #category : 'as yet unclassified' }
+JuegoMorph >> agregarObstaculo: unObstaculo conImagen: rutaImagen [
+    | obstaculoVisual |
+
+   obstaculoVisual := ObstaculoMorph new.
+
+   obstaculoVisual obstaculo: unObstaculo.
+   obstaculoVisual cargarImagen: rutaImagen.
+
+   self addMorphFront: obstaculoVisual.
+
+   obstaculos add: obstaculoVisual.  
+	
+	obstaculoVisual actualizarRepresentacion.
+]
+
+{ #category : 'as yet unclassified' }
+JuegoMorph >> eliminarObstaculos [
+
+	|paraEliminar|
+	
+	paraEliminar:= obstaculos select: [:visual|
+		(visual obstaculo activo not) or: [ visual top > self bottom ]
+		].
+	
+		paraEliminar do: [ :visual|
+			visual delete.
+			obstaculos remove: visual.
+			 ].
+]
 
 { #category : 'geometry' }
 JuegoMorph >> extent: unPunto [
@@ -31,6 +63,31 @@ JuegoMorph >> extent: unPunto [
            autoMorph position x @
            (self position y + self height - autoMorph height - 7).
     ].
+]
+
+{ #category : 'as yet unclassified' }
+JuegoMorph >> generarObstaculo [
+
+	| obs carrilAleatorio tipoAleatorio |
+	carrilAleatorio := 3 atRandom.
+	tipoAleatorio := 2 atRandom.
+
+	(tipoAleatorio = 1)
+   		ifTrue: [
+        	obs := ObstaculoFijo new.
+    	]
+    	ifFalse: [
+        	obs := AutoObstaculo new.
+        	obs velocidad: 1 + (3 atRandom).
+    	].
+
+	obs carril: carrilAleatorio.
+
+	"aparece por encima de la pantalla"
+
+	obs posicionY: -100.
+
+	self agregarObstaculo: obs conImagen: tipoAleatorio
 ]
 
 { #category : 'event handling' }
@@ -59,6 +116,7 @@ JuegoMorph >> initialize [
    self addMorphFront: autoMorph.
 
 	obstaculos := OrderedCollection new.
+	contadorObstaculos:= 0.
 
 "2. Al definir el tamaño inicial"
 	self extent: 1280@720.
@@ -113,7 +171,26 @@ JuegoMorph >> ruta: unaRuta [
 JuegoMorph >> step [ 
 
 	ruta actualizarDes: vehiculo velocidad.
+	
 	autoMorph actualizarPosicion.
+	
+	obstaculos do: [ :visual|
+		visual obstaculo avanzarRespectoA: vehiculo velocidad.
+		visual actualizarPosicion.
+		 ].
+	
+	"generar obs"
+	contadorObstaculos := contadorObstaculos +1.
+	
+	contadorObstaculos >= 60 ifTrue: [ 
+		self generarObstaculo.
+		contadorObstaculos:= 0.		
+		 ].
+	
+	self verificarColisiones.
+	
+	self eliminarObstaculos.
+	
 	self changed.
 
 ]
@@ -133,4 +210,14 @@ JuegoMorph >> vehiculo: vehi [
 	autoMorph vehiculo: vehi.
 	autoMorph  actualizarPosicion.
 
+]
+
+{ #category : 'as yet unclassified' }
+JuegoMorph >> verificarColisiones [
+
+	obstaculos do: [ :visual|
+		(visual obstaculo activo and: [autoMorph bounds intersects: visual bounds] ) ifTrue: [ 
+			visual obstaculo desactivar.
+			 ].
+		 ].
 ]

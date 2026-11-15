@@ -56,6 +56,11 @@ Obstaculo >> avanzar: unaDistancia [
     posicionY := posicionY + unaDistancia.
 ]
 
+{ #category : 'as yet unclassified' }
+Obstaculo >> avanzarRespectoA: velocidadJugador [
+    self avanzar: velocidadJugador.
+]
+
 { #category : 'accessing' }
 Obstaculo >> carril [
 

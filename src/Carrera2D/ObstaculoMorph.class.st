@@ -7,9 +7,26 @@ Class {
 		'imagen',
 		'alturaContenedor'
 	],
+	#classInstVars : [
+		'imagenes'
+	],
 	#category : 'Carrera2D',
 	#package : 'Carrera2D'
 }
+
+{ #category : 'accessing' }
+ObstaculoMorph class >> imagenes [
+
+	imagenes ifNil: [ 
+		imagenes:= Array new: 2.
+		
+		imagenes at:1 put: (Form fromFileNamed: 'C:\Carrera2D\obstaculo.png').
+
+
+		imagenes at:2 put: (Form fromFileNamed: 'C:\Carrera2D\auto.png').		
+		 ].
+	^imagenes .
+]
 
 { #category : 'as yet unclassified' }
 ObstaculoMorph >> actualizarEscala [
@@ -27,6 +44,8 @@ ObstaculoMorph >> actualizarEscala [
    		imagen := imagenOriginal scaledToSize: nuevoAncho@nuevaAltura.
 
    		self extent: imagen extent.
+		
+		alturaContenedor := self owner height.
 	].
 ]
 
@@ -34,7 +53,7 @@ ObstaculoMorph >> actualizarEscala [
 ObstaculoMorph >> actualizarPosicion [
     | posicionX posicionY |
 
-    posicionY := obstaculo posicionY.
+    posicionY := self owner top + obstaculo posicionY.
 
     posicionX := self owner center x.
 
@@ -57,8 +76,8 @@ ObstaculoMorph >> actualizarRepresentacion [
 ]
 
 { #category : 'as yet unclassified' }
-ObstaculoMorph >> cargarImagen: unaRuta [
-    imagenOriginal := Form fromFileNamed: unaRuta.
+ObstaculoMorph >> cargarImagen: unIndice [
+    imagenOriginal := self class imagenes at: unIndice.
 ]
 
 { #category : 'drawing' }

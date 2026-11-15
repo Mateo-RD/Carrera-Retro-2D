@@ -65,6 +65,14 @@ Vehiculo >> moverIzquierda [
 
 ]
 
+{ #category : 'as yet unclassified' }
+Vehiculo >> perderVida [
+    
+	(vida < 0) ifTrue: [ 
+		vida := (vida - 1)
+		].
+]
+
 { #category : 'accessing' }
 Vehiculo >> posicionX [
 
@@ -89,4 +97,10 @@ Vehiculo >> velocidad [
 
 	^velocidad.
 
+]
+
+{ #category : 'accessing' }
+Vehiculo >> vida [
+
+	^vida.
 ]
