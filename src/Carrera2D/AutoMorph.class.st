@@ -53,7 +53,7 @@ AutoMorph >> initialize [
 	
 	vehiculo := Vehiculo new.
 	self color: Color transparent.
-	imagenOriginal := (Form fromFileNamed: 'C:\Carrera2D\auto.png') scaledToSize: 100@150.
+	imagenOriginal := (Form fromFileNamed: (FileLocator workingDirectory / 'imagenes' / 'auto.png')) scaledToSize: 100@150.
 	
 	auto := imagenOriginal.
 

@@ -20,10 +20,10 @@ ObstaculoMorph class >> imagenes [
 	imagenes ifNil: [ 
 		imagenes:= Array new: 2.
 		
-		imagenes at:1 put: (Form fromFileNamed: 'C:\Carrera2D\obstaculo.png').
+		imagenes at:1 put: (Form fromFileNamed: (FileLocator workingDirectory / 'imagenes' / 'obstaculo.png')).
 
 
-		imagenes at:2 put: (Form fromFileNamed: 'C:\Carrera2D\auto.png').		
+		imagenes at:2 put: (Form fromFileNamed: (FileLocator workingDirectory / 'imagenes' / 'auto.png')).		
 		 ].
 	^imagenes .
 ]

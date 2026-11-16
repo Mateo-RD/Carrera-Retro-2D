@@ -59,7 +59,7 @@ RutaMorph >> initialize [
 
 
 
-   imagenOriginal := Form fromFileNamed: 'C:\Carrera2D\ruta2.png'.
+   imagenOriginal := Form fromFileNamed: (FileLocator workingDirectory / 'imagenes' / 'ruta2.png').
 
    imagenRuta := imagenOriginal.
 
