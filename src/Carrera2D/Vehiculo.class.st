@@ -68,9 +68,8 @@ Vehiculo >> moverIzquierda [
 { #category : 'as yet unclassified' }
 Vehiculo >> perderVida [
     
-	(vida < 0) ifTrue: [ 
-		vida := (vida - 1)
-		].
+	vida := (vida - 1)
+
 ]
 
 { #category : 'accessing' }

@@ -7,7 +7,8 @@ Class {
 		'autoMorph',
 		'rutaMorph',
 		'obstaculos',
-		'contadorObstaculos'
+		'contadorObstaculos',
+		'juego'
 	],
 	#category : 'Carrera2D',
 	#package : 'Carrera2D'
@@ -122,6 +123,15 @@ JuegoMorph >> initialize [
 	self extent: 1280@720.
 	
 	rutaMorph extent: self extent.
+]
+
+{ #category : 'accessing' }
+JuegoMorph >> juego: unJuego [
+
+	juego:= unJuego.
+	
+	self ruta: juego ruta.
+	self vehiculo: juego vehiculo.
 ]
 
 { #category : 'event handling' }
