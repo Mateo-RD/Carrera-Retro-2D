@@ -184,10 +184,10 @@ JuegoMorph >> step [
 	
 	autoMorph actualizarPosicion.
 	
-	obstaculos do: [ :visual|
-		visual obstaculo avanzarRespectoA: vehiculo velocidad.
-		visual actualizarPosicion.
-		 ].
+	obstaculos do: [ :visual |
+    visual obstaculo avanzarRespectoA: vehiculo velocidad.
+    visual actualizarRepresentacion.
+].
 	
 	"generar obs"
 	contadorObstaculos := contadorObstaculos +1.
