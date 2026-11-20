@@ -19,6 +19,12 @@ AutoObstaculo >> initialize [
     velocidad := 0.
 ]
 
+{ #category : 'as yet unclassified' }
+AutoObstaculo >> porcentajeAltura [
+
+	^0.20.
+]
+
 { #category : 'accessing' }
 AutoObstaculo >> velocidad [
     ^velocidad

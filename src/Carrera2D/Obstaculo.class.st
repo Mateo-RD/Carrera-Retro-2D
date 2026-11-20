@@ -91,6 +91,12 @@ Obstaculo >> initialize [
 "Por ahora, las dimensiones quedan en cero porque todavía no definimos el tamaño de las imágenes."
 ]
 
+{ #category : 'as yet unclassified' }
+Obstaculo >> porcentajeAltura [
+
+	^0.10.
+]
+
 { #category : 'accessing' }
 Obstaculo >> posicionY [
 

@@ -23,7 +23,7 @@ ObstaculoMorph class >> imagenes [
 		imagenes at:1 put: (Form fromFileNamed: (FileLocator workingDirectory / 'imagenes' / 'obstaculo.png')).
 
 
-		imagenes at:2 put: (Form fromFileNamed: (FileLocator workingDirectory / 'imagenes' / 'auto.png')).		
+		imagenes at:2 put: (Form fromFileNamed: (FileLocator workingDirectory / 'imagenes' / 'auto1.png')).		
 		 ].
 	^imagenes .
 ]
@@ -34,7 +34,7 @@ ObstaculoMorph >> actualizarEscala [
 
    
 	(alturaContenedor ~= self owner height) ifTrue: [
-		alturaDeseada := self owner height * 0.10.
+		alturaDeseada := self owner height * obstaculo porcentajeAltura.
 
    		factor := alturaDeseada / imagenOriginal height.
 
@@ -51,21 +51,24 @@ ObstaculoMorph >> actualizarEscala [
 
 { #category : 'as yet unclassified' }
 ObstaculoMorph >> actualizarPosicion [
-    | posicionX posicionY |
+    | posicionX posicionY anchoJuego inicioRuta anchoRuta anchoCarril |
 
-    posicionY := self owner top + obstaculo posicionY.
+   anchoJuego:= self owner width.
 
-    posicionX := self owner center x.
+	inicioRuta:= self owner left + (anchoJuego * 0.32).
+	anchoRuta:=  anchoJuego * 0.25.
+	
+	
+	"dividir la carretera en tres carriles"
+	anchoCarril:= anchoRuta/3.
 
-    obstaculo carril = 1 ifTrue: [
-        posicionX := posicionX - (self owner width * 0.25).
-    ].
+	
+	posicionY := self owner top + obstaculo posicionY.
 
-    obstaculo carril = 3 ifTrue: [
-        posicionX := posicionX + (self owner width * 0.25).
-    ].
+    posicionX := inicioRuta + (obstaculo carril * anchoCarril).
 
-    self position: posicionX @ posicionY.
+
+    self position: (posicionX - (self width / 2)) @ posicionY.
 ]
 
 { #category : 'as yet unclassified' }

@@ -78,7 +78,7 @@ JuegoMorph >> generarObstaculo [
     	]
     	ifFalse: [
         	obs := AutoObstaculo new.
-        	obs velocidad: 1 + (3 atRandom).
+        	obs velocidad: 5 + (25 atRandom).
     	].
 
 	obs carril: carrilAleatorio.
