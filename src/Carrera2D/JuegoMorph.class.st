@@ -8,11 +8,28 @@ Class {
 		'rutaMorph',
 		'obstaculos',
 		'contadorObstaculos',
-		'juego'
+		'juego',
+		'pantallaGameOver',
+		'imagenGameOverOriginal'
 	],
 	#category : 'Carrera2D',
 	#package : 'Carrera2D'
 }
+
+{ #category : 'as yet unclassified' }
+JuegoMorph >> actualizarPantallaGameOver [
+
+	| imagenEscalada |
+
+    pantallaGameOver ifNil: [ ^self ].
+    imagenGameOverOriginal ifNil: [ ^self ].
+
+    imagenEscalada := imagenGameOverOriginal
+        scaledToExactSize: self extent.
+
+    pantallaGameOver image: imagenEscalada.
+    pantallaGameOver position: self topLeft.
+]
 
 { #category : 'as yet unclassified' }
 JuegoMorph >> agregarObstaculo: unObstaculo conImagen: rutaImagen [
@@ -31,6 +48,29 @@ JuegoMorph >> agregarObstaculo: unObstaculo conImagen: rutaImagen [
 ]
 
 { #category : 'as yet unclassified' }
+JuegoMorph >> clickGameOver: unEvento [
+
+	|punto x y |
+	
+	punto:= unEvento position - pantallaGameOver position.
+	
+	x:= punto x * 1640 / pantallaGameOver width.
+	y:= punto y * 959 / pantallaGameOver height.
+	
+	"boton REINTENTAR"
+	((x between: 470 and: 1160) and: [ y between: 500 and: 640]) ifTrue: [ 
+		self reintentar.
+		^self
+		 ].
+	
+	"boton Menu Principal"
+	((x between: 470 and: 1160) and: [y between: 645 and: 785]) ifTrue: [ 
+		self volverAlMenu.
+		^self.
+		 ].
+]
+
+{ #category : 'as yet unclassified' }
 JuegoMorph >> eliminarObstaculos [
 
 	|paraEliminar|
@@ -40,8 +80,16 @@ JuegoMorph >> eliminarObstaculos [
 		].
 	
 		paraEliminar do: [ :visual|
+			
+			"Eliminar el objeto del dominio"
+			juego eliminarObstaculos: visual obstaculo.
+			
+			"Eliminar su representación gráfica"
 			visual delete.
+			
+			"Eliminarlo de la colección de Morphs"
 			obstaculos remove: visual.
+			
 			 ].
 ]
 
@@ -60,35 +108,28 @@ JuegoMorph >> extent: unPunto [
     autoMorph ifNotNil: [
        autoMorph escalarEn: self width.
 
-       autoMorph position:
-           autoMorph position x @
-           (self position y + self height - autoMorph height - 7).
+       autoMorph position: autoMorph position x @ (self position y + self height - autoMorph height - 7).
     ].
+
+	self actualizarPantallaGameOver.
 ]
 
 { #category : 'as yet unclassified' }
 JuegoMorph >> generarObstaculo [
 
-	| obs carrilAleatorio tipoAleatorio |
-	carrilAleatorio := 3 atRandom.
-	tipoAleatorio := 2 atRandom.
+	| obs tipoImagen |
 
-	(tipoAleatorio = 1)
-   		ifTrue: [
-        	obs := ObstaculoFijo new.
-    	]
-    	ifFalse: [
-        	obs := AutoObstaculo new.
-        	obs velocidad: 5 + (25 atRandom).
-    	].
-
-	obs carril: carrilAleatorio.
-
-	"aparece por encima de la pantalla"
-
-	obs posicionY: -100.
-
-	self agregarObstaculo: obs conImagen: tipoAleatorio
+	obs:= juego generarObstaculo.
+	
+	tipoImagen:= (obs isKindOf: AutoObstaculo) "identifica qué imagen corresponde:"
+		ifTrue: [ 
+			2
+			]
+		ifFalse: [ 
+			1
+			].
+		
+	self agregarObstaculo: obs conImagen: tipoImagen.
 ]
 
 { #category : 'event handling' }
@@ -139,6 +180,10 @@ JuegoMorph >> keyDown: evento [
 
 |tecla|
 
+	(juego isNil or: [ juego estaJugando not]) ifTrue: [ 
+			^self.
+		 ].
+
 "recibo el evento por teclado."
 	tecla:= evento keyValue.
 	
@@ -164,10 +209,47 @@ JuegoMorph >> keyDown: evento [
 
 ]
 
+{ #category : 'as yet unclassified' }
+JuegoMorph >> mostrarGameOver [
+
+    pantallaGameOver ifNotNil: [ ^self ].
+	
+	imagenGameOverOriginal := Form fromFileNamed: (FileLocator workingDirectory / 'imagenes' / 'gameover.png') fullName.
+	
+	pantallaGameOver:= ImageMorph new.
+	
+	pantallaGameOver image: imagenGameOverOriginal.
+	
+	self addMorphFront: pantallaGameOver.
+	
+	self actualizarPantallaGameOver.
+	
+	pantallaGameOver on: #mouseDown send: #clickGameOver: to: self.
+]
+
 { #category : 'event handling' }
 JuegoMorph >> mouseEnter: evento [
     evento hand newKeyboardFocus: self.
 
+]
+
+{ #category : 'as yet unclassified' }
+JuegoMorph >> reintentar [
+
+|nuevoJuego nuevaVista|
+
+	self stopStepping.
+	
+	nuevoJuego:= Juego new.
+	
+	nuevaVista:= self class new.
+	nuevaVista juego: nuevoJuego.
+	nuevaVista  openInWindow.
+	
+
+	self owner ifNotNil: [ :ventana|
+			ventana delete.
+		 ].
 ]
 
 { #category : 'accessing' }
@@ -179,13 +261,18 @@ JuegoMorph >> ruta: unaRuta [
 
 { #category : 'stepping and presenter' }
 JuegoMorph >> step [ 
-
-	ruta actualizarDes: vehiculo velocidad.
+	
+	juego estaJugando ifFalse: [ 
+		self mostrarGameOver.
+		self stopStepping.
+		^self
+		 ].
+	
+	juego actualizar.
 	
 	autoMorph actualizarPosicion.
 	
 	obstaculos do: [ :visual |
-    visual obstaculo avanzarRespectoA: vehiculo velocidad.
     visual actualizarRepresentacion.
 ].
 	
@@ -198,7 +285,6 @@ JuegoMorph >> step [
 		 ].
 	
 	self verificarColisiones.
-	
 	self eliminarObstaculos.
 	
 	self changed.
@@ -227,7 +313,22 @@ JuegoMorph >> verificarColisiones [
 
 	obstaculos do: [ :visual|
 		(visual obstaculo activo and: [autoMorph bounds intersects: visual bounds] ) ifTrue: [ 
-			visual obstaculo desactivar.
+			juego procesarColisionCon: visual obstaculo.
 			 ].
+		 ].
+]
+
+{ #category : 'as yet unclassified' }
+JuegoMorph >> volverAlMenu [
+
+| menu |
+
+	self stopStepping.
+	
+	menu:= MenuPrincipalMorph new.
+	menu openInWindow.
+	
+	self owner ifNotNil: [ :ventana |
+			ventana delete.
 		 ].
 ]
