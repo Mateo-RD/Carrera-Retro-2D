@@ -121,29 +121,50 @@ MenuPrincipalMorph >> mostrarControles [
 
 { #category : 'as yet unclassified' }
 MenuPrincipalMorph >> mostrarCreditos [
-    | pantalla fondo volver |
+    | pantalla fondo imagen volver menu tamano relleno |
+
+    menu := self submorphs first.
+    tamano := self extent.
 
     pantalla := Morph new.
-    pantalla extent: 800@600.
-    pantalla color: Color black.
-    pantalla position: self position.
+    pantalla color: Color transparent.
+    pantalla borderWidth: 0.
+    pantalla bounds: self bounds.
+
+    "Relleno verde para el margen derecho"
+    relleno := Morph new.
+    relleno color: (Color r: 0.18 g: 0.60 b: 0.08).
+    relleno borderWidth: 0.
+    relleno bounds: self bounds.
+    pantalla addMorphBack: relleno.
+
+    "Imagen de creditos"
+    imagen := PNGReadWriter formFromFileNamed:
+        (FileLocator workingDirectory / 'imagenes' / 'creditos.png') fullName.
 
     fondo := ImageMorph new.
-    fondo image: ((PNGReadWriter formFromFileNamed:
-        (FileLocator workingDirectory / 'imagenes' / 'creditos.png') fullName)
-        scaledToSize: 800@600).
-    fondo position: pantalla position.
-    pantalla addMorph: fondo.
+    fondo image: (imagen scaledToSize: tamano).
+    fondo position: self position.
+    pantalla addMorphFront: fondo.
 
+    "Boton VOLVER"
     volver := Morph new.
-    volver extent: 230@55.
-    volver position: pantalla position + (285@440).
+    volver extent:
+        ((tamano x * 230 / 800) @ (tamano y * 55 / 600)).
+    volver position:
+        self position +
+        ((tamano x * 285 / 800) @ (tamano y * 440 / 600)).
     volver color: Color transparent.
     volver borderWidth: 0.
-    volver on: #mouseUp send: #delete to: pantalla.
-    pantalla addMorph: volver.
 
+    volver on: #mouseUp send: #delete to: pantalla.
+    volver on: #mouseUp send: #show to: menu.
+
+    pantalla addMorphFront: volver.
+
+    menu hide.
     self addMorphFront: pantalla.
+
 ]
 
 { #category : 'event handling' }
