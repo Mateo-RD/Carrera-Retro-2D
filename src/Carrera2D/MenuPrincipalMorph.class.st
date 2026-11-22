@@ -1,3 +1,11 @@
+"
+Es la clase encargada de representar y administrar el menú principal de Carrera Retro 2D.
+
+Su responsabilidad es mostrar la interfaz inicial del juego y permitir que el usuario acceda a las diferentes opciones disponibles.
+
+Gestiona la presentación de los controles, los créditos y el inicio de una nueva partida.
+
+"
 Class {
 	#name : 'MenuPrincipalMorph',
 	#superclass : 'Morph',

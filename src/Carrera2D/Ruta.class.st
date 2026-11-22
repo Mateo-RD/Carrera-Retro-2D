@@ -1,3 +1,12 @@
+"
+Representa la carretera por la que se desplaza el vehículo durante la partida.
+
+Administra los límites horizontales de la ruta y el desplazamiento de las líneas de la carretera.
+
+Su responsabilidad es proporcionar los límites necesarios para el movimiento del vehículo y actualizar el desplazamiento de la carretera en función de la velocidad del jugador.
+
+La representación visual de la ruta se encuentra separada en la clase RutaMorph.
+"
 Class {
 	#name : 'Ruta',
 	#superclass : 'Object',

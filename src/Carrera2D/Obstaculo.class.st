@@ -1,5 +1,11 @@
 "
-Es la clase padre de los obstaculos mas especificos. Su rol es establecer las bases (Metodos y Atributos comunes) para para luego especializarla en los obstaculos mas especificos.
+Es la superclase de los distintos objetos que aparecen sobre la carretera.
+
+Define las características y comportamientos comunes, como el carril, la posición vertical, las dimensiones, el estado activo y el desplazamiento.
+
+Su responsabilidad es proporcionar una estructura reutilizable que permita especializar distintos tipos de objetos mediante herencia.
+
+De esta clase heredan ObstaculoFijo, AutoObstaculo y BidonCombustible.
 "
 Class {
 	#name : 'Obstaculo',

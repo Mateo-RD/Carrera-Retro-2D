@@ -1,3 +1,11 @@
+"
+Es la representación gráfica de los objetos que aparecen sobre la carretera.
+
+Su responsabilidad es cargar las imágenes correspondientes a cada tipo de objeto, dibujarlas, actualizar sus posiciones y adaptar su tamaño a las dimensiones de la pista.
+
+Puede representar obstáculos fijos, vehículos enemigos y bidones de combustible mediante una misma clase gráfica.
+
+"
 Class {
 	#name : 'ObstaculoMorph',
 	#superclass : 'Morph',

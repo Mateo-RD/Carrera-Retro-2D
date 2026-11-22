@@ -1,3 +1,12 @@
+"
+Es la clase encargada de representar gráficamente la carretera del juego.
+
+Su responsabilidad es dibujar la ruta, mostrar su desplazamiento y adaptar la representación a las dimensiones de la ventana.
+
+Utiliza la información proporcionada por el modelo Ruta para representar visualmente el avance del vehículo.
+
+Permite mantener separada la lógica de la carretera de su presentación gráfica.
+"
 Class {
 	#name : 'RutaMorph',
 	#superclass : 'Morph',

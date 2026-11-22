@@ -1,3 +1,12 @@
+"
+Representa la interfaz de información que se muestra durante la carrera.
+
+Su responsabilidad es visualizar las vidas restantes mediante corazones, el combustible disponible mediante una barra y el tiempo restante mediante un cronómetro.
+
+Consulta los datos de las clases Juego y Vehiculo para mantener actualizados los indicadores gráficos.
+
+
+"
 Class {
 	#name : 'HUDMorph',
 	#superclass : 'Morph',

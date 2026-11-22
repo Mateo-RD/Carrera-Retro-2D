@@ -1,3 +1,12 @@
+"
+Representa un vehículo enemigo que aparece como obstáculo durante la carrera.
+
+Hereda las características comunes de Obstaculo e incorpora una velocidad propia.
+
+Su responsabilidad es definir un comportamiento de desplazamiento diferente al de los obstáculos fijos, teniendo en cuenta tanto su velocidad como la del vehículo del jugador.
+
+Cuando el jugador colisiona con este objeto, pierde una vida.
+"
 Class {
 	#name : 'AutoObstaculo',
 	#superclass : 'Obstaculo',

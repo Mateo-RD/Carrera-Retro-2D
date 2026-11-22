@@ -1,3 +1,12 @@
+"
+Representa el vehículo controlado por el jugador durante la carrera.
+
+Administra su posición horizontal, velocidad, vidas restantes y combustible disponible.
+
+Proporciona métodos para acelerar, frenar, desplazarse hacia la izquierda o derecha, perder vidas, consumir combustible y recargarlo mediante los bidones.
+
+Su responsabilidad es mantener y modificar el estado del vehículo, respetando las restricciones de movimiento establecidas por la ruta.
+"
 Class {
 	#name : 'Vehiculo',
 	#superclass : 'Object',
@@ -28,7 +37,7 @@ Vehiculo >> combustible [
 Vehiculo >> consumirCombustible [
 
 	velocidad > 0 ifFalse: [ ^ self ].
-	combustible := combustible - (velocidad * 0.001). "el vehículo pierde una cantidad proporcional a su velocidad"
+	combustible := combustible - (velocidad * 0.002). "el vehículo pierde una cantidad proporcional a su velocidad"
 
 	combustible := combustible max: 0
 ]

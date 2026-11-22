@@ -1,3 +1,14 @@
+"
+Representa una partida de Carrera Retro 2D y es la clase encargada de coordinar la lógica principal del juego.
+
+Administra la ruta, el vehículo del jugador y la colección de obstáculos y bidones de combustible que aparecen durante la carrera.
+
+Su responsabilidad es actualizar los elementos del juego, generar obstáculos aleatorios, procesar las colisiones y controlar las condiciones de victoria y derrota.
+
+La partida finaliza con victoria cuando transcurre el tiempo establecido, o con derrota cuando el vehículo pierde todas sus vidas o se queda sin combustible.
+
+Esta clase pertenece al modelo del juego y mantiene separada la lógica de la representación gráfica.
+"
 Class {
 	#name : 'Juego',
 	#superclass : 'Object',

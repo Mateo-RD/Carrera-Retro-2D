@@ -1,3 +1,12 @@
+"
+Es la representación gráfica del vehículo controlado por el jugador.
+
+Su responsabilidad es dibujar el vehículo en pantalla, actualizar su posición visual y adaptar su tamaño a las dimensiones de la ventana.
+
+Se relaciona con la clase Vehiculo, de la cual obtiene la información necesaria para representar su estado.
+
+No administra las reglas de movimiento ni la velocidad del vehículo, ya que esas responsabilidades pertenecen al modelo.
+"
 Class {
 	#name : 'AutoMorph',
 	#superclass : 'Morph',

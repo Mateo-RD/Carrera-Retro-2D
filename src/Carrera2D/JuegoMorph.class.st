@@ -1,3 +1,13 @@
+"
+Es la clase encargada de representar gráficamente una partida de Carrera Retro 2D y de coordinar la interfaz durante el juego.
+
+Contiene las representaciones visuales de la ruta, el vehículo, los obstáculos y el HUD.
+
+Su responsabilidad es actualizar los elementos gráficos, recibir las entradas del teclado, detectar las intersecciones entre objetos y comunicar las colisiones al modelo Juego.
+
+También administra las pantallas de victoria y derrota, junto con las opciones para reintentar la partida o regresar al menú principal.
+
+"
 Class {
 	#name : 'JuegoMorph',
 	#superclass : 'Morph',
