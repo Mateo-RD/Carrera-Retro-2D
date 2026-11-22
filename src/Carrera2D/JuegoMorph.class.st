@@ -261,6 +261,9 @@ JuegoMorph >> ruta: unaRuta [
 
 { #category : 'stepping and presenter' }
 JuegoMorph >> step [ 
+
+	"(juego isNil or: [ ruta isNil or: [ vehiculo isNil ] ])
+    	ifTrue: [ ^self ]."
 	
 	juego estaJugando ifFalse: [ 
 		self mostrarGameOver.

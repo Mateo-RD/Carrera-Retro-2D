@@ -31,7 +31,7 @@ Juego >> eliminarObstaculos: unObstaculo [
 { #category : 'as yet unclassified' }
 Juego >> estaJugando [
 
-	^estado = #jugando.
+	^ estado = #jugando
 ]
 
 { #category : 'as yet unclassified' }

@@ -2,7 +2,8 @@ Class {
 	#name : 'MenuPrincipalMorph',
 	#superclass : 'Morph',
 	#instVars : [
-		'juego'
+		'juego',
+		'fondoMorph'
 	],
 	#category : 'Carrera2D',
 	#package : 'Carrera2D'
@@ -10,58 +11,58 @@ Class {
 
 { #category : 'geometry' }
 MenuPrincipalMorph >> extent: unTamano [
-    | fondo imagen ancho alto |
+    | imagen ancho alto |
 
     super extent: unTamano.
     self submorphs ifEmpty: [ ^ self ].
 
-    fondo := self submorphs first.
-
     ancho := unTamano x - 30.
     alto := unTamano y.
 
-    imagen := JPEGReadWriter formFromFileNamed:
+    imagen := Form fromFileNamed:
         (FileLocator workingDirectory / 'imagenes' / 'menu.jpeg') fullName.
 
-    fondo image: (imagen scaledToSize: ancho @ alto).
-	 fondo position: 300@50.
+
+"En Morphic, extent: puede ejecutarse durante la inicialización, antes de que exista fondoMorph. Por eso utilizamos: ifNotNil"
+    fondoMorph ifNotNil: [
+    	fondoMorph image: (imagen scaledToExactSize: self extent).
+    	fondoMorph position: self topLeft.
+		].
 ]
 
 { #category : 'initialization' }
-MenuPrincipalMorph >> iniciarJuego [
-    | ruta vehiculo juegoMorph |
-
-    ruta := Ruta new.
-    vehiculo := Vehiculo new.
-    vehiculo ruta: ruta.
-
-    juegoMorph := JuegoMorph new.
-    juegoMorph ruta: ruta.
-    juegoMorph vehiculo: vehiculo.
-
-    juegoMorph openInWindow.
-    juegoMorph startStepping.
-
-    self delete.
+MenuPrincipalMorph >> iniciarJuego [ 
+	| nuevoJuego juegoVisual|
+	
+	nuevoJuego:= Juego new.
+	
+	juegoVisual:= JuegoMorph new.
+	juegoVisual juego: nuevoJuego.
+	
+	juegoVisual openInWindow.
+	
+	self owner ifNotNil: [ :ventana|
+		ventana delete
+		 ].
 ]
 
 { #category : 'initialization' }
 MenuPrincipalMorph >> initialize [
-    | fondo imagen |
+    | imagen |
 
     super initialize.
     self extent: 1200@803.
     self color: Color black.
 
-    imagen := JPEGReadWriter formFromFileNamed:
+    imagen := Form fromFileNamed:
         (FileLocator workingDirectory / 'imagenes' / 'menu.jpeg') fullName.
 
-    fondo := ImageMorph new.
-    fondo image: (imagen scaledToSize: 1200@803).
-    fondo position: 0@0.
+    fondoMorph := ImageMorph new.
+    fondoMorph image: (imagen scaledToSize: 1200@803).
+    fondoMorph position: 0@0.
 
-    self addMorph: fondo.
-    fondo on: #mouseDown send: #mouseDown: to: self.
+    self addMorph: fondoMorph.
+    fondoMorph on: #mouseDown send: #mouseDown: to: self.
 ]
 
 { #category : 'as yet unclassified' }
@@ -74,8 +75,8 @@ MenuPrincipalMorph >> mostrarControles [
     pantalla position: self position.
 
 	 fondo := ImageMorph new.
-	 fondo image: (PNGReadWriter formFromFileNamed:
-    (FileLocator workingDirectory / 'imagenes' / 'menuNuevo.png') fullName).
+	 fondo image:   (Form fromFileNamed:
+    (FileLocator workingDirectory / 'imagenes' / 'ruta1.png') fullName).
 	 fondo extent: pantalla extent.
  	 fondo position: pantalla position.
 	 pantalla addMorph: fondo.
@@ -139,8 +140,8 @@ MenuPrincipalMorph >> mostrarCreditos [
     pantalla addMorphBack: relleno.
 
     "Imagen de creditos"
-    imagen := PNGReadWriter formFromFileNamed:
-        (FileLocator workingDirectory / 'imagenes' / 'creditos.png') fullName.
+    imagen := (PNGReadWriter formFromFileNamed:
+        (FileLocator workingDirectory / 'imagenes' / 'creditos.png') fullName).
 
     fondo := ImageMorph new.
     fondo image: (imagen scaledToSize: tamano).
