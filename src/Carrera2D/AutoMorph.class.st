@@ -21,7 +21,7 @@ AutoMorph >> actualizarPosicion [
 	posicionVisualX:= (vehiculo posicionX * factor) rounded.
 	
 	centroVisualX := (self owner width / 2) - (self width / 2).
-    self position: (vehiculo posicionX + centroVisualX + posicionVisualX + self owner position x - 10) @self  position y.
+    self position: (self owner left "vehiculo posicionX" + centroVisualX + posicionVisualX + self owner position x - 10) @self  position y.
 ]
 
 { #category : 'drawing' }

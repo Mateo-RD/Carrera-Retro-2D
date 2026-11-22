@@ -20,16 +20,13 @@ RutaMorph >> drawOn: dibujo [
     ruta ifNil: [ ^self ].
 
     "Escalar solamente cuando cambia la altura"
-    alturaEscalada ~= self height ifTrue: [
-        imagenRuta := imagenOriginal
-            scaledToSize: (self width @ self height).
+    imagenRuta extent ~= self extent ifTrue: [
+
 
         "Garantizar que la escala se base en la altura"
-        imagenRuta := imagenOriginal
-            scaledToSize:
-                ((imagenOriginal width * self height /
-                    imagenOriginal height) rounded @ self height).
+        imagenRuta := imagenOriginal scaledToExactSize: self extent.
 
+"scaledToSize: ((imagenOriginal width * self height / imagenOriginal height) rounded @ self height)."
         alturaEscalada := self height.
     ].
 

@@ -18,14 +18,24 @@ Class {
 ObstaculoMorph class >> imagenes [
 
 	imagenes ifNil: [ 
-		imagenes:= Array new: 2.
+		imagenes:= Array new: 3.
 		
 		imagenes at:1 put: (Form fromFileNamed: (FileLocator workingDirectory / 'imagenes' / 'obstaculo.png')).
 
 
-		imagenes at:2 put: (Form fromFileNamed: (FileLocator workingDirectory / 'imagenes' / 'auto1.png')).		
+		imagenes at:2 put: (Form fromFileNamed: (FileLocator workingDirectory / 'imagenes' / 'auto1.png')).	
+			
+		imagenes at:3 put: (Form fromFileNamed: (FileLocator workingDirectory / 'imagenes' / 'bidon.png')).	
 		 ].
 	^imagenes .
+]
+
+{ #category : 'accessing' }
+ObstaculoMorph class >> imagenes: unValor [
+
+
+"metodo temporal solo para lograr subir el PNG del bidon"
+	imagenes:= unValor.
 ]
 
 { #category : 'as yet unclassified' }

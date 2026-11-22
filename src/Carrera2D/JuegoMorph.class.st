@@ -10,7 +10,10 @@ Class {
 		'contadorObstaculos',
 		'juego',
 		'pantallaGameOver',
-		'imagenGameOverOriginal'
+		'imagenGameOverOriginal',
+		'hudMorph',
+		'pantallaVictoria',
+		'imagenVictoriaOriginal'
 	],
 	#category : 'Carrera2D',
 	#package : 'Carrera2D'
@@ -29,6 +32,20 @@ JuegoMorph >> actualizarPantallaGameOver [
 
     pantallaGameOver image: imagenEscalada.
     pantallaGameOver position: self topLeft.
+]
+
+{ #category : 'as yet unclassified' }
+JuegoMorph >> actualizarPantallaVictoria [
+
+	|imagenEscalada|
+	
+	pantallaVictoria ifNil: [ ^self ].
+	imagenVictoriaOriginal ifNil: [ ^self ].
+	
+	imagenEscalada := imagenVictoriaOriginal scaledToExactSize: self extent.
+	
+	pantallaVictoria image: imagenEscalada .
+	pantallaVictoria position: self topLeft.
 ]
 
 { #category : 'as yet unclassified' }
@@ -68,6 +85,32 @@ JuegoMorph >> clickGameOver: unEvento [
 		self volverAlMenu.
 		^self.
 		 ].
+]
+
+{ #category : 'as yet unclassified' }
+JuegoMorph >> clickVictoria: unEvento [
+
+	| punto x y |
+
+	punto := unEvento position - pantallaVictoria position.
+
+	x := punto x * imagenVictoriaOriginal width
+		/ pantallaVictoria width.
+
+	y := punto y * imagenVictoriaOriginal height
+		/ pantallaVictoria height.
+
+    "Boton REINTENTAR"
+	((x between: 305 and: 795) and: [ y between: 740 and: 865 ]) ifTrue: [
+			self reintentar.
+			^self
+		].
+
+    "Boton MENU"
+	((x between: 880 and: 1345) and: [ y between: 740 and: 865 ]) ifTrue: [
+			self volverAlMenu.
+			^self
+		].
 ]
 
 { #category : 'as yet unclassified' }
@@ -111,7 +154,15 @@ JuegoMorph >> extent: unPunto [
        autoMorph position: autoMorph position x @ (self position y + self height - autoMorph height - 7).
     ].
 
+	"Ubicamos el HUD en la esquina superior izquierda"
+    hudMorph ifNotNil: [
+        hudMorph position: self topLeft + (20@20).
+        self addMorphFront: hudMorph.
+			].
+	
+	
 	self actualizarPantallaGameOver.
+	self actualizarPantallaVictoria.
 ]
 
 { #category : 'as yet unclassified' }
@@ -121,12 +172,10 @@ JuegoMorph >> generarObstaculo [
 
 	obs:= juego generarObstaculo.
 	
-	tipoImagen:= (obs isKindOf: AutoObstaculo) "identifica qué imagen corresponde:"
-		ifTrue: [ 
-			2
-			]
+	tipoImagen:= (obs isKindOf: BidonCombustible) ifTrue: [ 3 ] "identifica qué imagen corresponde:" 
 		ifFalse: [ 
-			1
+			(obs isKindOf: AutoObstaculo) ifTrue: [ 2 ]
+				ifFalse: [ 1 ]
 			].
 		
 	self agregarObstaculo: obs conImagen: tipoImagen.
@@ -173,6 +222,13 @@ JuegoMorph >> juego: unJuego [
 	
 	self ruta: juego ruta.
 	self vehiculo: juego vehiculo.
+	
+	hudMorph := HUDMorph new.
+	hudMorph juego: juego.
+
+	self addMorphFront: hudMorph.
+
+	hudMorph position: self topLeft + (15@15).
 ]
 
 { #category : 'event handling' }
@@ -227,6 +283,23 @@ JuegoMorph >> mostrarGameOver [
 	pantallaGameOver on: #mouseDown send: #clickGameOver: to: self.
 ]
 
+{ #category : 'as yet unclassified' }
+JuegoMorph >> mostrarVictoria [
+
+    pantallaVictoria ifNotNil: [ ^nil ].
+
+	imagenVictoriaOriginal := Form fromFileNamed: (FileLocator workingDirectory / 'imagenes' / 'victoria.png') fullName.
+	
+	pantallaVictoria:= ImageMorph new.
+	pantallaVictoria image: imagenVictoriaOriginal.
+	
+	self addMorphFront: pantallaVictoria.
+	
+	self actualizarPantallaVictoria.
+	
+	pantallaVictoria on: #mouseDown send: #clickVictoria: to: self. 
+]
+
 { #category : 'event handling' }
 JuegoMorph >> mouseEnter: evento [
     evento hand newKeyboardFocus: self.
@@ -266,7 +339,12 @@ JuegoMorph >> step [
     	ifTrue: [ ^self ]."
 	
 	juego estaJugando ifFalse: [ 
-		self mostrarGameOver.
+		(juego estado = #victoria) ifTrue: [ 
+			self mostrarVictoria
+			 ]
+		ifFalse: [ 
+			self mostrarGameOver.	
+			 ].
 		self stopStepping.
 		^self
 		 ].
@@ -274,6 +352,8 @@ JuegoMorph >> step [
 	juego actualizar.
 	
 	autoMorph actualizarPosicion.
+	
+	hudMorph actualizar.
 	
 	obstaculos do: [ :visual |
     visual actualizarRepresentacion.

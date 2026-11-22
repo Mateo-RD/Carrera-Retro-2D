@@ -5,7 +5,8 @@ Class {
 		'posicionX',
 		'velocidad',
 		'vida',
-		'ruta'
+		'ruta',
+		'combustible'
 	],
 	#category : 'Carrera2D',
 	#package : 'Carrera2D'
@@ -14,15 +15,29 @@ Class {
 { #category : 'as yet unclassified' }
 Vehiculo >> acelerar [
 
-	velocidad:= velocidad + 1.
+	velocidad:= (velocidad + 1) min: 100.
 
+]
+
+{ #category : 'accessing' }
+Vehiculo >> combustible [
+	^combustible.
+]
+
+{ #category : 'as yet unclassified' }
+Vehiculo >> consumirCombustible [
+
+	velocidad > 0 ifFalse: [ ^ self ].
+	combustible := combustible - (velocidad * 0.001). "el vehículo pierde una cantidad proporcional a su velocidad"
+
+	combustible := combustible max: 0
 ]
 
 { #category : 'as yet unclassified' }
 Vehiculo >> frenar [
 
 
-	velocidad:= velocidad - 1.
+	velocidad:= (velocidad - 1) max: 10.
 
 ]
 
@@ -30,9 +45,9 @@ Vehiculo >> frenar [
 Vehiculo >> initialize [ 
 
 posicionX :=0.
-velocidad := 0.
+velocidad := 5.
 vida:= 3.
-
+combustible := 100.
 ]
 
 { #category : 'as yet unclassified' }
@@ -82,6 +97,12 @@ Vehiculo >> posicionX [
 Vehiculo >> posicionX: ejeX [
 
 	posicionX:= ejeX 
+]
+
+{ #category : 'as yet unclassified' }
+Vehiculo >> recargarCombustible: unaCantidad [
+
+	combustible := (combustible + unaCantidad) min: 100.
 ]
 
 { #category : 'accessing' }

@@ -9,9 +9,31 @@ Class {
 	#package : 'Carrera2D'
 }
 
+{ #category : 'as yet unclassified' }
+MenuPrincipalMorph >> actualizarControles: pantalla [
+    | imagen fondo volver ancho alto |
+
+    imagen := pantalla valueOfProperty: #imagenOriginal.
+    fondo := pantalla valueOfProperty: #fondoControles.
+    volver := pantalla valueOfProperty: #botonVolver.
+
+    pantalla bounds: self bounds.
+
+    ancho := pantalla width.
+    alto := pantalla height.
+
+    fondo image: (imagen scaledToExactSize: pantalla extent).
+    fondo position: pantalla topLeft.
+
+    volver extent: ((ancho * 0.33) rounded @ (alto * 0.09) rounded).
+
+    volver position: pantalla position + ((ancho * 0.34) rounded @ (alto * 0.82) rounded).
+
+]
+
 { #category : 'geometry' }
 MenuPrincipalMorph >> extent: unTamano [
-    | imagen ancho alto |
+    | imagen ancho alto pantalla |
 
     super extent: unTamano.
     self submorphs ifEmpty: [ ^ self ].
@@ -19,8 +41,7 @@ MenuPrincipalMorph >> extent: unTamano [
     ancho := unTamano x - 30.
     alto := unTamano y.
 
-    imagen := Form fromFileNamed:
-        (FileLocator workingDirectory / 'imagenes' / 'menu.jpeg') fullName.
+    imagen := Form fromFileNamed: (FileLocator workingDirectory / 'imagenes' / 'menu.jpeg') fullName.
 
 
 "En Morphic, extent: puede ejecutarse durante la inicialización, antes de que exista fondoMorph. Por eso utilizamos: ifNotNil"
@@ -28,6 +49,16 @@ MenuPrincipalMorph >> extent: unTamano [
     	fondoMorph image: (imagen scaledToExactSize: self extent).
     	fondoMorph position: self topLeft.
 		].
+	
+    "Actualizar pantalla COMO JUGAR si esta abierta"
+    pantalla := self submorphs
+        detect: [ :m |
+            m hasProperty: #imagenOriginal ]
+        ifNone: [ nil ].
+
+    pantalla ifNotNil: [
+        self actualizarControles: pantalla.
+    ].
 ]
 
 { #category : 'initialization' }
@@ -67,57 +98,41 @@ MenuPrincipalMorph >> initialize [
 
 { #category : 'as yet unclassified' }
 MenuPrincipalMorph >> mostrarControles [
-    | pantalla fondo titulo instrucciones volver |
+    | pantalla fondo imagen volver |
 
     pantalla := Morph new.
     pantalla extent: self extent.
-    pantalla color: (Color r: 0.08 g: 0.12 b: 0.16).
     pantalla position: self position.
+    pantalla color: Color black.
 
-	 fondo := ImageMorph new.
-	 fondo image:   (Form fromFileNamed:
-    (FileLocator workingDirectory / 'imagenes' / 'ruta1.png') fullName).
-	 fondo extent: pantalla extent.
- 	 fondo position: pantalla position.
-	 pantalla addMorph: fondo.
+    imagen := Form fromFileNamed:
+        (FileLocator workingDirectory /
+        'imagenes' / 'comoJugar.png') fullName.
 
-    titulo := StringMorph new.
-    titulo contents: 'COMO JUGAR'.
-    titulo color: Color yellow.
-    titulo font: (LogicalFont familyName: 'Arial' pointSize: 30).
-    titulo position: pantalla position + (270@100).
-    pantalla addMorph: titulo.
-
-    instrucciones := StringMorph new.
-	 instrucciones contents: 'FLECHA IZQUIERDA: mover a la izquierda'.
-	 instrucciones color: Color white.
-	 instrucciones font: (LogicalFont familyName: 'Arial' pointSize: 20).
-	 instrucciones position: pantalla position + (230@220).
-	 pantalla addMorph: instrucciones.
-
-	 instrucciones := StringMorph new.
-	 instrucciones contents: 'FLECHA DERECHA: mover a la derecha'.
-	 instrucciones color: Color white.
-	 instrucciones font: (LogicalFont familyName: 'Arial' pointSize: 20).
-	 instrucciones position: pantalla position + (230@260).
-	 pantalla addMorph: instrucciones.
-
-    instrucciones := StringMorph new.
-  	 instrucciones contents: 'ESQUIVA LOS OBSTACULOS'.
- 	 instrucciones color: Color yellow.
-	 instrucciones font: (LogicalFont familyName: 'Arial' pointSize: 20).
-	 instrucciones position: pantalla position + (290@310).
-	 pantalla addMorph: instrucciones.
+    fondo := ImageMorph new.
+    fondo image: (imagen scaledToSize: pantalla extent).
+    fondo position: pantalla position.
+    pantalla addMorph: fondo.
 
     volver := SimpleButtonMorph new.
-    volver label: 'VOLVER'.
-    volver extent: 200@50.
-    volver position: pantalla position + (300@420).
+    volver label: ''.
+    volver color: Color transparent.
+    volver borderWidth: 0.
     volver target: pantalla.
     volver actionSelector: #delete.
-    pantalla addMorph: volver.
+
+    pantalla addMorphFront: volver.
 
     self addMorphFront: pantalla.
+
+    "Guardar referencias para actualizar el tamaño"
+    pantalla setProperty: #imagenOriginal toValue: imagen.
+    pantalla setProperty: #fondoControles toValue: fondo.
+    pantalla setProperty: #botonVolver toValue: volver.
+
+    self actualizarControles: pantalla.
+
+
 ]
 
 { #category : 'as yet unclassified' }
