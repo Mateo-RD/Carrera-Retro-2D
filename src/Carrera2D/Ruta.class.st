@@ -17,6 +17,18 @@ desplazamientoLineas:= desplazamientoLineas + velocidad.
 
 ]
 
+{ #category : 'as yet unclassified' }
+Ruta >> actualizarLimitesSegun: anchoVentana [
+    | factor limite|
+
+    factor := anchoVentana / 1270.
+
+	 limite := 60 + ((factor - 1) * 15).
+
+    limiteIzquierdo := 0 - limite.
+    limiteDerecho := limite.
+]
+
 { #category : 'accessing' }
 Ruta >> desplazamientoLineas [
 

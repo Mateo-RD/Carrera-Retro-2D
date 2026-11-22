@@ -15,7 +15,7 @@ Class {
 { #category : 'as yet unclassified' }
 Vehiculo >> acelerar [
 
-	velocidad:= (velocidad + 1) min: 100.
+	velocidad:= (velocidad + 10) min: 80.
 
 ]
 
@@ -37,7 +37,7 @@ Vehiculo >> consumirCombustible [
 Vehiculo >> frenar [
 
 
-	velocidad:= (velocidad - 1) max: 10.
+	velocidad:= (velocidad - 10) max: 10.
 
 ]
 
@@ -45,7 +45,7 @@ Vehiculo >> frenar [
 Vehiculo >> initialize [ 
 
 posicionX :=0.
-velocidad := 5.
+velocidad := 10.
 vida:= 3.
 combustible := 100.
 ]
@@ -55,13 +55,14 @@ Vehiculo >> moverDerecha [
 
 
 (posicionX < (ruta limiteDerecho) ) ifTrue: [ 
-	posicionX:= posicionX + 10.	
+	posicionX := (posicionX + 10) min: ruta limiteDerecho
 	 ]
 	ifFalse: [ 
 		(velocidad > 10) ifTrue: [ 
 			velocidad:=  velocidad - 10.
 			 ].
 		 ].
+
 
 ]
 
@@ -70,7 +71,7 @@ Vehiculo >> moverIzquierda [
 
 
 (posicionX > (ruta limiteIzquierdo) ) ifTrue: [ 
-	posicionX:= posicionX - 10.	
+	posicionX := (posicionX - 10) max: ruta limiteIzquierdo
 	 ]
 	ifFalse: [ 
 		(velocidad > 10) ifTrue: [ 

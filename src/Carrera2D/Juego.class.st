@@ -63,8 +63,10 @@ Juego >> generarObstaculo [
 
 	| obs carrilAleatorio tipoAleatorio |
 	carrilAleatorio := 3 atRandom.
-	tipoAleatorio := 3 atRandom.
+	tipoAleatorio := 5 atRandom.
 
+
+	"20 % de bidones, 40 % de obstáculos fijos y 40 % de autos enemigos"
 	(tipoAleatorio = 1)
    		ifTrue: [
         	obs := BidonCombustible new.
@@ -127,6 +129,7 @@ Juego >> procesarColisionCon: unObstaculo [
 	unObstaculo desactivar.
 	
 	vehiculo perderVida.
+	vehiculo frenar.
 	vehiculo vida = 0 ifTrue: [ 
 			estado:= #gameOver.
 		 ].

@@ -61,11 +61,11 @@ ObstaculoMorph >> actualizarEscala [
 
 { #category : 'as yet unclassified' }
 ObstaculoMorph >> actualizarPosicion [
-    | posicionX posicionY anchoJuego inicioRuta anchoRuta anchoCarril |
+    | posicionX posicionY anchoJuego centroRuta anchoRuta anchoCarril |
 
    anchoJuego:= self owner width.
 
-	inicioRuta:= self owner left + (anchoJuego * 0.32).
+	centroRuta := self owner left + (anchoJuego/2).
 	anchoRuta:=  anchoJuego * 0.25.
 	
 	
@@ -75,7 +75,7 @@ ObstaculoMorph >> actualizarPosicion [
 	
 	posicionY := self owner top + obstaculo posicionY.
 
-    posicionX := inicioRuta + (obstaculo carril * anchoCarril).
+    posicionX := centroRuta + ((obstaculo carril - 2) * anchoCarril).
 
 
     self position: (posicionX - (self width / 2)) @ posicionY.

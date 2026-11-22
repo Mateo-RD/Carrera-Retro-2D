@@ -31,9 +31,32 @@ MenuPrincipalMorph >> actualizarControles: pantalla [
 
 ]
 
+{ #category : 'as yet unclassified' }
+MenuPrincipalMorph >> actualizarCreditos: pantalla [
+    | fondo volver imagen tamano |
+
+    tamano := self extent.
+
+    fondo := pantalla submorphs second.
+    volver := pantalla submorphs first.
+
+    imagen := PNGReadWriter formFromFileNamed:
+        (FileLocator workingDirectory / 'imagenes' / 'creditos.png') fullName.
+
+    pantalla bounds: self bounds.
+
+    fondo image: (imagen scaledToExactSize: tamano).
+    fondo position: self position.
+
+    volver extent: ((tamano x * 230 / 800) @ (tamano y * 55 / 600)).
+
+    volver position: self position + ((tamano x * 285 / 800) @ (tamano y * 440 / 600)).
+
+]
+
 { #category : 'geometry' }
 MenuPrincipalMorph >> extent: unTamano [
-    | imagen ancho alto pantalla |
+    | imagen ancho alto pantalla pantallaCreditos |
 
     super extent: unTamano.
     self submorphs ifEmpty: [ ^ self ].
@@ -59,6 +82,16 @@ MenuPrincipalMorph >> extent: unTamano [
     pantalla ifNotNil: [
         self actualizarControles: pantalla.
     ].
+
+	"Actualizar pantalla CREDITOS si esta abierta"
+	pantallaCreditos := self submorphs
+    	detect: [ :m |
+       	 m hasProperty: #pantallaCreditos ]
+   	 ifNone: [ nil ].
+
+	pantallaCreditos ifNotNil: [
+    	self actualizarCreditos: pantallaCreditos.
+	].
 ]
 
 { #category : 'initialization' }
@@ -143,6 +176,7 @@ MenuPrincipalMorph >> mostrarCreditos [
     tamano := self extent.
 
     pantalla := Morph new.
+	 pantalla setProperty: #pantallaCreditos toValue: true.
     pantalla color: Color transparent.
     pantalla borderWidth: 0.
     pantalla bounds: self bounds.
@@ -159,7 +193,7 @@ MenuPrincipalMorph >> mostrarCreditos [
         (FileLocator workingDirectory / 'imagenes' / 'creditos.png') fullName).
 
     fondo := ImageMorph new.
-    fondo image: (imagen scaledToSize: tamano).
+    fondo image: (imagen scaledToExactSize: tamano).
     fondo position: self position.
     pantalla addMorphFront: fondo.
 
@@ -180,6 +214,8 @@ MenuPrincipalMorph >> mostrarCreditos [
 
     menu hide.
     self addMorphFront: pantalla.
+
+	 self actualizarCreditos: pantalla.
 
 ]
 

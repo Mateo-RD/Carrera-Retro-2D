@@ -13,15 +13,17 @@ Class {
 { #category : 'as yet unclassified' }
 AutoMorph >> actualizarPosicion [
 
-	| centroVisualX posicionVisualX factor |
-	
-	"posicionVisualX: Cumple el rol de traducir mis movimientos fisicos a los logicos..."
-	
-	factor:= self owner width / 1200.
-	posicionVisualX:= (vehiculo posicionX * factor) rounded.
-	
-	centroVisualX := (self owner width / 2) - (self width / 2).
-    self position: (self owner left "vehiculo posicionX" + centroVisualX + posicionVisualX + self owner position x - 10) @self  position y.
+    | factor posicionVisualX centroVisualX |
+
+    factor := self owner width / 1200.
+
+    posicionVisualX := (vehiculo posicionX * factor) rounded.
+
+    centroVisualX := (self owner width / 2) - (self width / 2).
+    self position: (vehiculo posicionX + centroVisualX + posicionVisualX + self owner position x - 10) @self  position y.
+
+
+
 ]
 
 { #category : 'drawing' }

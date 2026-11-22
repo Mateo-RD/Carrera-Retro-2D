@@ -143,6 +143,10 @@ JuegoMorph >> extent: unPunto [
     super extent: unPunto.
     
 
+	ruta ifNotNil: [
+    	ruta actualizarLimitesSegun: self width.
+		].
+	
    rutaMorph ifNotNil: [
        rutaMorph bounds: self bounds.
     ].
