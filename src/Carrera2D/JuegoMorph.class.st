@@ -392,7 +392,6 @@ JuegoMorph >> step [
 JuegoMorph >> stepTime [ 
 ^50.
 
-"despues probar con 75"
 
 ]
 

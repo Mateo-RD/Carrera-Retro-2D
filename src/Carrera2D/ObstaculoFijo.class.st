@@ -1,12 +1,11 @@
 "
-Representa un objeto de recarga de combustible que puede ser recogido por el jugador durante la carrera.
+Representa un obstáculo fijo que aparece sobre la carretera y que el jugador debe esquivar.
 
-Hereda de Obstaculo las características comunes necesarias para aparecer y desplazarse sobre la carretera.
+Hereda de Obstaculo las propiedades relacionadas con la posición, dimensiones, carril y estado activo.
 
-Su responsabilidad es recuperar una cantidad determinada de combustible del vehículo cuando se produce una colisión.
+Su responsabilidad es representar los obstáculos que no poseen movimiento propio, pero que se desplazan visualmente respecto del vehículo debido al avance de la carrera.
 
-A diferencia de los obstáculos perjudiciales, no provoca la pérdida de vidas. Una vez recogido, queda desactivado para evitar que se utilice nuevamente.
-
+Cuando el jugador colisiona con uno de estos obstáculos, pierde una vida.
 "
 Class {
 	#name : 'ObstaculoFijo',
